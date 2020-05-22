@@ -91,9 +91,6 @@ final class PreviewBuffer implements PreviewBufferInterface
      */
     public function getEmptyLexeme(): LexemeInterface
     {
-        if (!$this->input->isFinished() && !isset($this->buffer[$this->previewOffset])) {
-            $this->buffer[$this->previewOffset] = $this->input->read();
-        }
         if (isset($this->buffer[$this->previewOffset])) {
             $symbol = $this->buffer[$this->previewOffset];
 
