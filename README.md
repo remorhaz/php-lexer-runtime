@@ -13,7 +13,7 @@
 ## Installation
 To install this library using [composer](https://getcomposer.org/), run the following command:
 ```
-composer require remorhaz/php-lexer-runtime
+composer require remorhaz/lexer-runtime
 ```
 
 ## License
