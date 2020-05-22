@@ -29,24 +29,60 @@ class AcceptanceTest extends TestCase
     public const TOKEN_B = 0x02;
     public const TOKEN_EOI = 0xFF;
 
-    public function testLexerMatchesTokensCorrecty(): void
+    /**
+     * @param string $inputText
+     * @param array  $expectedValue
+     * @dataProvider providerLexerMatchesTokens
+     */
+    public function testLexerMatchesTokensCorrectly(string $inputText, array $expectedValue): void
     {
         $matcherA = $this->createMatcherA();
         $matcherB = $this->createMatcherB();
         $lexer = new Lexer(['a' => $matcherA, 'b' => $matcherB]);
-        $input = new StringInput('aab');
+        $input = new StringInput($inputText);
         $tokenReader = $lexer->createTokenReader($input);
         $tokens = [];
         while (!$tokenReader->isFinished()) {
             $tokens[] = $tokenReader->read();
         }
 
-        $expectedValue = [
-            ['id' => self::TOKEN_A, 'offset' => 0],
-            ['id' => self::TOKEN_B, 'offset' => 1],
-            ['id' => self::TOKEN_EOI, 'offset' => 2],
-        ];
         self::assertSame($expectedValue, $this->exportTokens(...$tokens));
+    }
+
+    public function providerLexerMatchesTokens(): array
+    {
+        return [
+            'A' => [
+                'a',
+                [
+                    ['id' => self::TOKEN_A, 'offset' => 0],
+                    ['id' => self::TOKEN_EOI, 'offset' => 1],
+                ],
+            ],
+            'B' => [
+                'b',
+                [
+                    ['id' => self::TOKEN_B, 'offset' => 0],
+                    ['id' => self::TOKEN_EOI, 'offset' => 1],
+                ],
+            ],
+            'AB' => [
+                'aab',
+                [
+                    ['id' => self::TOKEN_A, 'offset' => 0],
+                    ['id' => self::TOKEN_B, 'offset' => 1],
+                    ['id' => self::TOKEN_EOI, 'offset' => 2],
+                ],
+            ],
+            'BA' => [
+                'baa',
+                [
+                    ['id' => self::TOKEN_B, 'offset' => 0],
+                    ['id' => self::TOKEN_A, 'offset' => 1],
+                    ['id' => self::TOKEN_EOI, 'offset' => 2],
+                ],
+            ],
+        ];
     }
 
     private function createMatcherA(): TokenMatcherInterface
@@ -61,11 +97,11 @@ class AcceptanceTest extends TestCase
                 if ($input->isFinished()) {
                     goto error;
                 }
-                $symbol = $input->getPreviewSymbol();
-                if (ord('a') == $symbol->getCode()) {
+                $code = $input->getPreviewSymbol()->getCode();
+                if (ord('a') == $code) {
                     goto state1;
                 }
-                if (ord('b') == $symbol->getCode()) {
+                if (ord('b') == $code) {
                     $selector->setMatcher('b');
 
                     return new MatchRepeat();
@@ -77,11 +113,11 @@ class AcceptanceTest extends TestCase
                 if ($input->isFinished()) {
                     goto state2;
                 }
-                $symbol = $input->getPreviewSymbol();
-                if (ord('a') == $symbol->getCode()) {
+                $code = $input->getPreviewSymbol()->getCode();
+                if (ord('a') == $code) {
                     goto state1;
                 }
-                if (ord('b') == $symbol->getCode()) {
+                if (ord('b') == $code) {
                     $selector->setMatcher('b');
                     goto state2;
                 }
@@ -119,8 +155,8 @@ class AcceptanceTest extends TestCase
 
                     return new MatchRepeat();
                 }
-                $symbol = $input->getPreviewSymbol();
-                if (ord('b') == $symbol->getCode()) {
+                $code = $input->getPreviewSymbol()->getCode();
+                if (ord('b') == $code) {
                     goto state1;
                 }
                 $selector->restoreMatcher();
@@ -132,10 +168,10 @@ class AcceptanceTest extends TestCase
                 if ($input->isFinished()) {
                     goto state2;
                 }
-                if (ord('b') == $symbol->getCode()) {
+                $code = $input->getPreviewSymbol()->getCode();
+                if (ord('b') == $code) {
                     goto state1;
                 }
-                $input->previewPrevious();
 
                 state2:
                 $selector->restoreMatcher();
@@ -147,7 +183,7 @@ class AcceptanceTest extends TestCase
 
             public function createFinishToken(int $offset, PreviewBufferInterface $input): TokenInterface
             {
-                throw new \RuntimeException("");
+                throw new \RuntimeException("This matcher cannot create finish tokens");
             }
         };
     }

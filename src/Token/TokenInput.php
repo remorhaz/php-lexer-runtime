@@ -9,7 +9,6 @@ use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\Symbol;
 use Remorhaz\Lexer\Runtime\IO\SymbolInterface;
 use Remorhaz\Lexer\Runtime\IO\SymbolReaderInterface;
-use Remorhaz\Lexer\Runtime\Token\TokenReaderInterface;
 
 use function is_int;
 

@@ -31,6 +31,8 @@ final class ArrayInput implements SymbolReaderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return bool
      * @psalm-pure
      */
@@ -39,6 +41,11 @@ final class ArrayInput implements SymbolReaderInterface
         return $this->length == $this->offset;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return SymbolInterface
+     */
     public function read(): SymbolInterface
     {
         if ($this->length == $this->offset) {

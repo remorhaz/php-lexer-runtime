@@ -100,4 +100,30 @@ class ArrayInputTest extends TestCase
         $input->read();
         self::assertSame(2, $input->getOffset());
     }
+
+    public function testGetEmptyLexeme_Constructed_ReturnsLexemeWithZeroStartOffset(): void
+    {
+        $input = new ArrayInput();
+        self::assertSame([0], $input->getEmptyLexeme()->getStartOffsets());
+    }
+
+    public function testGetEmptyLexeme_Constructed_ReturnsLexemeWithZeroFinishOffset(): void
+    {
+        $input = new ArrayInput();
+        self::assertSame([0], $input->getEmptyLexeme()->getFinishOffsets());
+    }
+
+    public function testGetEmptyLexeme_SingleCharRead_ReturnsLexemeWithOneStartOffset(): void
+    {
+        $input = new ArrayInput(2);
+        $input->read();
+        self::assertSame([1], $input->getEmptyLexeme()->getStartOffsets());
+    }
+
+    public function testGetEmptyLexeme_SingleCharRead_ReturnsLexemeWithOneFinishOffset(): void
+    {
+        $input = new ArrayInput(2);
+        $input->read();
+        self::assertSame([1], $input->getEmptyLexeme()->getFinishOffsets());
+    }
 }
