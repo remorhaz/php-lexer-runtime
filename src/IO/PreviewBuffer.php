@@ -94,9 +94,9 @@ final class PreviewBuffer implements PreviewBufferInterface
         if (isset($this->buffer[$this->previewOffset])) {
             $symbol = $this->buffer[$this->previewOffset];
 
-            return EmptyLexeme::fromOffsets($this->previewOffset, ...$symbol->getLexeme()->getStartOffsets());
+            return EmptyLexeme::fromOffsets(...$symbol->getLexeme()->getStartOffsets());
         }
 
-        return new EmptyLexeme($this->previewOffset, $this->input->getEmptyLexeme());
+        return $this->input->getEmptyLexeme();
     }
 }

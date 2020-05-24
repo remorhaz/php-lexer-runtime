@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\IO;
 
-interface ReaderInterface
+use Traversable;
+
+interface ReaderInterface extends Traversable
 {
 
     /**

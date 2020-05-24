@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\Token;
 
+use Iterator;
+use IteratorAggregate;
 use Remorhaz\Lexer\Runtime\IO\EmptyLexeme;
 use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\PreviewBufferInterface;
 
 use function array_merge;
 
-final class TokenReader implements TokenReaderInterface
+final class TokenReader implements IteratorAggregate, TokenReaderInterface
 {
 
     /**
@@ -94,5 +96,16 @@ final class TokenReader implements TokenReaderInterface
     public function getEmptyLexeme(): LexemeInterface
     {
         return new EmptyLexeme($this->offset, $this->previewBuffer->getEmptyLexeme());
+    }
+
+    /**
+     * @return Iterator
+     * @psalm-return Iterator<int,TokenInterface>
+     */
+    public function getIterator(): Iterator
+    {
+        while (!$this->isFinished()) {
+            yield $this->getOffset() => $this->read();
+        }
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\Token;
 
+use Iterator;
+use IteratorAggregate;
 use Remorhaz\Lexer\Runtime\IO\Exception;
 use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\Symbol;
@@ -12,7 +14,7 @@ use Remorhaz\Lexer\Runtime\IO\SymbolReaderInterface;
 
 use function is_int;
 
-final class TokenInput implements SymbolReaderInterface
+final class TokenInput implements IteratorAggregate, SymbolReaderInterface
 {
 
     public const ATTRIBUTE_SYMBOL_CODE = 'symbol.code';
@@ -64,5 +66,16 @@ final class TokenInput implements SymbolReaderInterface
     public function getEmptyLexeme(): LexemeInterface
     {
         return $this->tokenReader->getEmptyLexeme();
+    }
+
+    /**
+     * @return Iterator
+     * @psalm-return Iterator<int,SymbolInterface>
+     */
+    public function getIterator(): Iterator
+    {
+        while (!$this->isFinished()) {
+            yield $this->getOffset() => $this->read();
+        }
     }
 }

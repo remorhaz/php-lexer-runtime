@@ -214,28 +214,28 @@ class PreviewBufferTest extends TestCase
     {
         $input = new ArrayInput();
         $buffer = new PreviewBuffer($input);
-        self::assertSame([0, 0], $buffer->getEmptyLexeme()->getStartOffsets());
+        self::assertSame([0], $buffer->getEmptyLexeme()->getStartOffsets());
     }
 
     public function testGetEmptyLexeme_EmptyInput_ReturnsLexemeWithZeroFinishOffsets(): void
     {
         $input = new ArrayInput();
         $buffer = new PreviewBuffer($input);
-        self::assertSame([0, 0], $buffer->getEmptyLexeme()->getFinishOffsets());
+        self::assertSame([0], $buffer->getEmptyLexeme()->getFinishOffsets());
     }
 
     public function testGetEmptyLexeme_NonEmptyInput_ReturnsLexemeWithZeroStartOffsets(): void
     {
         $input = new ArrayInput(1);
         $buffer = new PreviewBuffer($input);
-        self::assertSame([0, 0], $buffer->getEmptyLexeme()->getStartOffsets());
+        self::assertSame([0], $buffer->getEmptyLexeme()->getStartOffsets());
     }
 
     public function testGetEmptyLexeme_NonEmptyInput_ReturnsLexemeWithZeroFinishOffsets(): void
     {
         $input = new ArrayInput(1);
         $buffer = new PreviewBuffer($input);
-        self::assertSame([0, 0], $buffer->getEmptyLexeme()->getFinishOffsets());
+        self::assertSame([0], $buffer->getEmptyLexeme()->getFinishOffsets());
     }
 
     public function testGetEmptyLexeme_OneSymbolFetched_ReturnsLexemeWithOneStartOffsets(): void
@@ -243,7 +243,7 @@ class PreviewBufferTest extends TestCase
         $input = new ArrayInput(1);
         $buffer = new PreviewBuffer($input);
         $buffer->previewNext();
-        self::assertSame([1, 1], $buffer->getEmptyLexeme()->getStartOffsets());
+        self::assertSame([1], $buffer->getEmptyLexeme()->getStartOffsets());
     }
 
     public function testGetEmptyLexeme_OneSymbolFetched_ReturnsLexemeWithOneFinishOffsets(): void
@@ -251,7 +251,17 @@ class PreviewBufferTest extends TestCase
         $input = new ArrayInput(1);
         $buffer = new PreviewBuffer($input);
         $buffer->previewNext();
-        self::assertSame([1, 1], $buffer->getEmptyLexeme()->getFinishOffsets());
+        self::assertSame([1], $buffer->getEmptyLexeme()->getFinishOffsets());
+    }
+
+    public function testGetemptyLexeme_TwoSymbolsFetchedAndOneStepBack_ReturnsLexemeWithOneFinishOffsets(): void
+    {
+        $input = new ArrayInput(1, 2);
+        $buffer = new PreviewBuffer($input);
+        $buffer->previewNext();
+        $buffer->previewNext();
+        $buffer->previewPrevious();
+        self::assertSame([1], $buffer->getEmptyLexeme()->getFinishOffsets());
     }
 
     private function exportLexemeSymbolCodes(LexemeInterface $lexeme): array

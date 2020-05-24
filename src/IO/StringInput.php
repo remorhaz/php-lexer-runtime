@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\IO;
 
+use Iterator;
+use IteratorAggregate;
+
 use function strlen;
 
-final class StringInput implements SymbolReaderInterface
+final class StringInput implements IteratorAggregate, SymbolReaderInterface
 {
 
     /**
@@ -64,5 +67,16 @@ final class StringInput implements SymbolReaderInterface
     public function getEmptyLexeme(): LexemeInterface
     {
         return new EmptyLexeme($this->offset, new NullLexeme());
+    }
+
+    /**
+     * @return Iterator
+     * @psalm-return Iterator<int,SymbolInterface>
+     */
+    public function getIterator(): Iterator
+    {
+        while (!$this->isFinished()) {
+            yield $this->getOffset() => $this->read();
+        }
     }
 }

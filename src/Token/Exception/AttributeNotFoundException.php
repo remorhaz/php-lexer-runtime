@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Remorhaz\Lexer\Runtime\Token\Exception;
 
 use OutOfRangeException;
-use Remorhaz\Lexer\Runtime\Exception\ExceptionInterface;
 use Throwable;
 
 final class AttributeNotFoundException extends OutOfRangeException implements ExceptionInterface
