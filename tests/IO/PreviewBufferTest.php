@@ -254,7 +254,17 @@ class PreviewBufferTest extends TestCase
         self::assertSame([1], $buffer->getEmptyLexeme()->getFinishOffsets());
     }
 
-    public function testGetemptyLexeme_TwoSymbolsFetchedAndOneStepBack_ReturnsLexemeWithOneFinishOffsets(): void
+    public function testGetEmptyLexeme_TwoSymbolsFetchedAndOneStepBack_ReturnsLexemeWithOneStartOffsets(): void
+    {
+        $input = new ArrayInput(1, 2);
+        $buffer = new PreviewBuffer($input);
+        $buffer->previewNext();
+        $buffer->previewNext();
+        $buffer->previewPrevious();
+        self::assertSame([1], $buffer->getEmptyLexeme()->getStartOffsets());
+    }
+
+    public function testGetEmptyLexeme_TwoSymbolsFetchedAndOneStepBack_ReturnsLexemeWithOneFinishOffsets(): void
     {
         $input = new ArrayInput(1, 2);
         $buffer = new PreviewBuffer($input);

@@ -21,6 +21,10 @@ final class MatcherNotFoundException extends OutOfBoundsException implements Exc
         parent::__construct("Matcher not found: {$this->matcherKey}", 0, $previous);
     }
 
+    /**
+     * @return string
+     * @psalm-pure
+     */
     public function getMatcherKey(): string
     {
         return $this->matcherKey;

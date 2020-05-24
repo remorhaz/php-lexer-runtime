@@ -12,6 +12,6 @@ final class TokenNotReadyException extends LogicException implements ExceptionIn
 
     public function __construct(Throwable $previous = null)
     {
-        parent::__construct("Token is not ready", 0, $previous);
+        parent::__construct("Token is not ready yet", 0, $previous);
     }
 }

@@ -21,6 +21,10 @@ final class UnexpectedEndOfInputException extends OutOfRangeException implements
         parent::__construct("Unexpected end of input at offset {$this->offset}", 0, $previous);
     }
 
+    /**
+     * @return int
+     * @psalm-pure
+     */
     public function getOffset(): int
     {
         return $this->offset;

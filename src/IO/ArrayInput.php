@@ -83,7 +83,7 @@ final class ArrayInput implements IteratorAggregate, SymbolReaderInterface
     public function getIterator(): Iterator
     {
         while (!$this->isFinished()) {
-            yield $this->getOffset() => $this->read();
+            yield $this->offset => $this->read();
         }
     }
 }

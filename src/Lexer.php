@@ -30,7 +30,7 @@ final class Lexer
     public function __construct(array $matchers, ?string $startMatcherKey = null)
     {
         if (empty($matchers)) {
-            throw new Exception\NoMatchersException();
+            throw new Exception\MatchersNotFoundException();
         }
         if (!isset($startMatcherKey)) {
             $startMatcherKey = array_key_first($matchers);

@@ -21,6 +21,10 @@ final class InvalidPreviewOffsetException extends OutOfRangeException implements
         parent::__construct("Invalid preview offset: {$this->offset}", 0, $previous);
     }
 
+    /**
+     * @return int
+     * @psalm-pure
+     */
     public function getOffset(): int
     {
         return $this->offset;

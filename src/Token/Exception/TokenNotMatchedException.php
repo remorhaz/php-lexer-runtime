@@ -24,12 +24,13 @@ final class TokenNotMatchedException extends RuntimeException implements Excepti
     public function __construct(array $offsets, Throwable $previous = null)
     {
         $this->offsets = $offsets;
-        parent::__construct("Failed to match token", 0, $previous);
+        parent::__construct("Token not matched", 0, $previous);
     }
 
     /**
      * @return int[]
      * @psalm-return array<int,int>
+     * @psalm-pure
      */
     public function getOffsets(): array
     {

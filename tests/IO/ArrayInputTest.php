@@ -7,6 +7,8 @@ namespace Remorhaz\Lexer\Runtime\Test\IO;
 use PHPUnit\Framework\TestCase;
 use Remorhaz\Lexer\Runtime\IO\ArrayInput;
 use Remorhaz\Lexer\Runtime\IO\Exception\UnexpectedEndOfInputException;
+use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
+use Remorhaz\Lexer\Runtime\IO\SymbolInterface;
 
 /**
  * @covers \Remorhaz\Lexer\Runtime\IO\ArrayInput
@@ -125,5 +127,105 @@ class ArrayInputTest extends TestCase
         $input = new ArrayInput(2);
         $input->read();
         self::assertSame([1], $input->getEmptyLexeme()->getFinishOffsets());
+    }
+
+    /**
+     * @param array $data
+     * @param array $expectedValue
+     * @dataProvider providerGetIterator
+     */
+    public function testGetIterator_Constructed_IteratesMatchingArray(array $data, array $expectedValue): void
+    {
+        $input = new ArrayInput(...$data);
+        self::assertSame($expectedValue, $this->exportSymbolIterator($input));
+    }
+
+    public function providerGetIterator(): array
+    {
+        return [
+            'No data' => [[], []],
+            'Single value' => [
+                [1],
+                [
+                    [
+                        'offset' => 0,
+                        'symbol' => [
+                            'code' => 1,
+                            'offset' => 0,
+                            'lexeme' => [
+                                'codes' => [1],
+                                'starts' => [0],
+                                'finishes' => [0],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'Two values' => [
+                [3, 4],
+                [
+                    [
+                        'offset' => 0,
+                        'symbol' => [
+                            'code' => 3,
+                            'offset' => 0,
+                            'lexeme' => [
+                                'codes' => [3],
+                                'starts' => [0],
+                                'finishes' => [0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'offset' => 1,
+                        'symbol' => [
+                            'code' => 4,
+                            'offset' => 1,
+                            'lexeme' => [
+                                'codes' => [4],
+                                'starts' => [1],
+                                'finishes' => [1],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function exportSymbolIterator(iterable $input): array
+    {
+        $result = [];
+        foreach ($input as $offset => $symbol) {
+            $result[] = [
+                'offset' => $offset,
+                'symbol' => $this->exportSymbol($symbol),
+            ];
+        }
+
+        return $result;
+    }
+
+    private function exportSymbol(SymbolInterface $symbol): array
+    {
+        return [
+            'code' => $symbol->getCode(),
+            'offset' => $symbol->getOffset(),
+            'lexeme' => $this->exportLexeme($symbol->getLexeme()),
+        ];
+    }
+
+    private function exportLexeme(LexemeInterface $lexeme): array
+    {
+        $codes = [];
+        foreach ($lexeme->getSymbols() as $symbol) {
+            $codes[] = $symbol->getCode();
+        }
+
+        return [
+            'codes' => $codes,
+            'starts' => $lexeme->getStartOffsets(),
+            'finishes' => $lexeme->getFinishOffsets(),
+        ];
     }
 }
