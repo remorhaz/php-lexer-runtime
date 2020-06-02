@@ -15,7 +15,11 @@ jobs:
 install:
   - mkdir -p ./build/logs
   - composer self-update
-  - composer install --prefer-source --no-interaction
+  - if [ "$TRAVIS_PHP_VERSION" == "nightly" ]
+      composer install --prefer-source --no-interaction --ignore-platform-reqs
+    else
+      composer install --prefer-source --no-interaction
+    fi
 
 script:
   - vendor/bin/phpcs -sp --report-junit=build/logs/phpcs.xml
