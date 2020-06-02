@@ -8,17 +8,16 @@ matrix:
       env: XDEBUG=YES
     - php: nightly
       env: XDEBUG=NO
-jobs:
   allow_failures:
     - php: nightly
 
 install:
   - mkdir -p ./build/logs
   - composer self-update
-  - if [ "$TRAVIS_PHP_VERSION" == "nightly" ]
-      composer install --prefer-source --no-interaction --ignore-platform-reqs
+  - if [ "$TRAVIS_PHP_VERSION" == "nightly" ]; then
+      composer install --prefer-source --no-interaction --ignore-platform-reqs;
     else
-      composer install --prefer-source --no-interaction
+      composer install --prefer-source --no-interaction;
     fi
 
 script:
