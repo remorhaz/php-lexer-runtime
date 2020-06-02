@@ -48,6 +48,8 @@ final class MatcherSelector implements MatcherSelectorInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return TokenMatcherInterface
      * @psalm-pure
      */
@@ -60,6 +62,11 @@ final class MatcherSelector implements MatcherSelectorInterface
         return $this->getMatcherByKey($this->matcherKeys[0]);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param string $matcherKey
+     */
     public function setMatcher(string $matcherKey): void
     {
         if (!isset($this->matchers[$matcherKey])) {
@@ -68,6 +75,9 @@ final class MatcherSelector implements MatcherSelectorInterface
         array_unshift($this->matcherKeys, $matcherKey);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function restoreMatcher(): void
     {
         if (count($this->matcherKeys) == 1) {
