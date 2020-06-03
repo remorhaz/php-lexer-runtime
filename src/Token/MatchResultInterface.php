@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\Token;
 
+use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\Token\TokenInterface;
 
 /**
@@ -29,4 +30,16 @@ interface MatchResultInterface
      * @psalm-pure
      */
     public function getToken(): TokenInterface;
+
+    /**
+     * @return bool
+     * @psalm-pure
+     */
+    public function hasLexeme(): bool;
+
+    /**
+     * @return LexemeInterface
+     * @psalm-pure
+     */
+    public function getLexeme(): LexemeInterface;
 }

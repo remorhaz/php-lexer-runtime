@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Remorhaz\Lexer\Runtime\Token;
 
-use Remorhaz\Lexer\Runtime\Token\TokenInterface;
+use Remorhaz\Lexer\Runtime\IO\EmptyLexeme;
+use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 
 /**
  * @psalm-immutable
@@ -12,6 +13,9 @@ use Remorhaz\Lexer\Runtime\Token\TokenInterface;
 final class MatchFail implements MatchResultInterface
 {
 
+    /**
+     * @var int[]
+     */
     private $offsets;
 
     public function __construct(int ...$offsets)
@@ -44,5 +48,23 @@ final class MatchFail implements MatchResultInterface
     public function getToken(): TokenInterface
     {
         throw new Exception\TokenNotMatchedException($this->offsets);
+    }
+
+    /**
+     * @return bool
+     * @psalm-pure
+     */
+    public function hasLexeme(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return LexemeInterface
+     * @psalm-pure
+     */
+    public function getLexeme(): LexemeInterface
+    {
+        return EmptyLexeme::fromOffsets(...$this->offsets);
     }
 }

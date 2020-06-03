@@ -44,7 +44,9 @@ final class MatcherSelector implements MatcherSelectorInterface
         if (isset($this->matchers[$matcherKey])) {
             return $this->matchers[$matcherKey];
         }
+        // @codeCoverageIgnoreStart
         throw new Exception\MatcherNotFoundException($matcherKey);
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -55,11 +57,13 @@ final class MatcherSelector implements MatcherSelectorInterface
      */
     public function getMatcher(): TokenMatcherInterface
     {
-        if (!isset($this->matcherKeys[0])) {
-            throw new Exception\MatcherKeyNotFoundException();
+        if (isset($this->matcherKeys[0])) {
+            return $this->getMatcherByKey($this->matcherKeys[0]);
         }
 
-        return $this->getMatcherByKey($this->matcherKeys[0]);
+        // @codeCoverageIgnoreStart
+        throw new Exception\MatcherKeyNotFoundException();
+        // @codeCoverageIgnoreEnd
     }
 
     /**
