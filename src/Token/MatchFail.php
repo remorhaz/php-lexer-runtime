@@ -15,6 +15,7 @@ final class MatchFail implements MatchResultInterface
 
     /**
      * @var int[]
+     * @psalm-var array<int,int>
      */
     private $offsets;
 
