@@ -5,32 +5,33 @@ declare(strict_types=1);
 namespace Remorhaz\Lexer\Runtime\IO\Exception;
 
 use DomainException;
+use Remorhaz\Lexer\Runtime\Token\AttributeInterface;
 use Throwable;
 
 final class InvalidSymbolCodeException extends DomainException implements ExceptionInterface
 {
 
     /**
-     * @var mixed
+     * @var AttributeInterface
      */
-    private $symbolCode;
+    private $attribute;
 
     /**
-     * @param mixed          $symbolCode
-     * @param Throwable|null $previous
+     * @param AttributeInterface $attribute
+     * @param Throwable|null     $previous
      */
-    public function __construct($symbolCode, Throwable $previous = null)
+    public function __construct(AttributeInterface $attribute, Throwable $previous = null)
     {
-        $this->symbolCode = $symbolCode;
+        $this->attribute = $attribute;
         parent::__construct("Invalid symbol code", 0, $previous);
     }
 
     /**
-     * @return mixed
+     * @return AttributeInterface
      * @psalm-pure
      */
-    public function getSymbolCode()
+    public function getAttribute(): AttributeInterface
     {
-        return $this->symbolCode;
+        return $this->attribute;
     }
 }

@@ -14,6 +14,7 @@ final class ArrayInput implements IteratorAggregate, SymbolReaderInterface
 
     /**
      * @var int[]
+     * @psalm-var array<int, int>
      */
     private $data;
 
@@ -59,6 +60,8 @@ final class ArrayInput implements IteratorAggregate, SymbolReaderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return int
      * @psalm-pure
      */
@@ -68,6 +71,8 @@ final class ArrayInput implements IteratorAggregate, SymbolReaderInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return LexemeInterface
      * @psalm-pure
      */
@@ -78,7 +83,7 @@ final class ArrayInput implements IteratorAggregate, SymbolReaderInterface
 
     /**
      * @return Iterator
-     * @psalm-return Iterator<int,SymbolInterface>
+     * @psalm-return Iterator<int, SymbolInterface>
      */
     public function getIterator(): Iterator
     {

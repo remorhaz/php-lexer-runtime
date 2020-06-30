@@ -28,26 +28,42 @@ final class Token implements TokenInterface
     private $lexeme;
 
     /**
-     * @var array
-     * @psalm-var array<string,mixed>
+     * @var AttributeCollectionInterface
      */
     private $attributes;
 
     /**
+     * @param int                               $offset
+     * @param LexemeInterface                   $lexeme
+     * @param AttributeCollectionInterface|null $attributes
+     * @return TokenInterface
+     */
+    public static function createEoi(
+        int $offset,
+        LexemeInterface $lexeme,
+        ?AttributeCollectionInterface $attributes = null
+    ): TokenInterface {
+        return new self(TokenInterface::ID_EOI, $offset, $lexeme, $attributes ?? new AttributeCollection());
+    }
+
+    /**
      * Token constructor.
      *
-     * @param int             $id
-     * @param int             $offset
-     * @param LexemeInterface $lexeme
-     * @param array           $attributes
-     * @psalm-param array<string,mixed> $attributes
+     * @param int                               $id
+     * @param int                               $offset
+     * @param LexemeInterface                   $lexeme
+     * @param AttributeCollectionInterface|null $attributes
      */
-    public function __construct(int $id, int $offset, LexemeInterface $lexeme, array $attributes = [])
-    {
+    public function __construct(
+        int $id,
+        int $offset,
+        LexemeInterface $lexeme,
+        ?AttributeCollectionInterface $attributes = null
+    ) {
         $this->id = $id;
         $this->offset = $offset;
         $this->lexeme = $lexeme;
-        $this->attributes = $attributes;
+        $this->attributes = $attributes ?? new AttributeCollection();
     }
 
     /**
@@ -78,21 +94,20 @@ final class Token implements TokenInterface
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * @return AttributeCollectionInterface
      * @psalm-pure
      */
-    public function getAttribute(string $name)
+    public function getAttributes(): AttributeCollectionInterface
     {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        }
-
-        throw new Exception\AttributeNotFoundException($name);
+        return $this->attributes;
     }
 
+    /**
+     * @return bool
+     * @psalm-pure
+     */
     public function isFinal(): bool
     {
-        return false;
+        return self::ID_EOI == $this->id;
     }
 }

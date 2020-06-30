@@ -10,9 +10,9 @@ interface MatcherSelectorInterface
     /**
      * Returns active token matcher.
      *
-     * @return TokenMatcherInterface
+     * @return MatcherInterface
      */
-    public function getMatcher(): TokenMatcherInterface;
+    public function getMatcher(): MatcherInterface;
 
     /**
      * Sets active token matcher by given key.

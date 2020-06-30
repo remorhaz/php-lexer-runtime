@@ -10,8 +10,6 @@ use Remorhaz\Lexer\Runtime\IO\EmptyLexeme;
 use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\PreviewBufferInterface;
 
-use function array_merge;
-
 final class TokenReader implements IteratorAggregate, TokenReaderInterface
 {
 
@@ -65,19 +63,13 @@ final class TokenReader implements IteratorAggregate, TokenReaderInterface
     public function read(): TokenInterface
     {
         if ($this->isFinished) {
-            throw new Exception\UnexpectedEndOfInputException(
-                array_merge(
-                    [$this->offset],
-                    $this->previewBuffer->getEmptyLexeme()->getStartOffsets()
-                )
-            );
+            throw new Exception\UnexpectedEndOfInputException($this->getEmptyLexeme()->getStartOffsets());
         }
 
         if ($this->previewBuffer->isFinished()) {
             $this->isFinished = true;
-            $matcher = $this->matcherSelector->getMatcher();
 
-            return $matcher->createFinishToken($this->offset, $this->previewBuffer);
+            return Token::createEoi($this->offset, $this->previewBuffer->getEmptyLexeme());
         }
 
         do {
@@ -100,7 +92,7 @@ final class TokenReader implements IteratorAggregate, TokenReaderInterface
 
     /**
      * @return Iterator
-     * @psalm-return Iterator<int,TokenInterface>
+     * @psalm-return Iterator<int, TokenInterface>
      */
     public function getIterator(): Iterator
     {

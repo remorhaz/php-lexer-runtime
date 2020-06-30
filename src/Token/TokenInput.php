@@ -11,8 +11,7 @@ use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\Symbol;
 use Remorhaz\Lexer\Runtime\IO\SymbolInterface;
 use Remorhaz\Lexer\Runtime\IO\SymbolReaderInterface;
-
-use function is_int;
+use Throwable;
 
 final class TokenInput implements IteratorAggregate, SymbolReaderInterface
 {
@@ -32,13 +31,12 @@ final class TokenInput implements IteratorAggregate, SymbolReaderInterface
     public function read(): SymbolInterface
     {
         $token = $this->tokenReader->read();
-        /** @psalm-var mixed $symbolCode */
-        $symbolCode = $token->getAttribute(self::ATTRIBUTE_SYMBOL_CODE);
-        if (is_int($symbolCode)) {
-            return new Symbol($token->getOffset(), $symbolCode, $token->getLexeme());
+        $attribute = $token->getAttributes()->get(self::ATTRIBUTE_SYMBOL_CODE);
+        try {
+            return new Symbol($token->getOffset(), $attribute->asInteger(), $token->getLexeme());
+        } catch (Throwable $e) {
+            throw new Exception\InvalidSymbolCodeException($attribute, $e);
         }
-
-        throw new Exception\InvalidSymbolCodeException($symbolCode);
     }
 
     /**

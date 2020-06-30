@@ -15,7 +15,7 @@ final class Lexeme implements LexemeInterface
 
     /**
      * @var SymbolInterface[]
-     * @psalm-var array<int,SymbolInterface>
+     * @psalm-var array<int, SymbolInterface>
      */
     private $symbols;
 
@@ -29,7 +29,7 @@ final class Lexeme implements LexemeInterface
 
     /**
      * @return SymbolInterface[]
-     * @psalm-return array<int,SymbolInterface>
+     * @psalm-return array<int, SymbolInterface>
      * @psalm-pure
      */
     public function getSymbols(): array
@@ -39,7 +39,7 @@ final class Lexeme implements LexemeInterface
 
     /**
      * @return int[]
-     * @psalm-return array<int,int>
+     * @psalm-return array<int, int>
      * @psalm-pure
      */
     public function getStartOffsets(): array

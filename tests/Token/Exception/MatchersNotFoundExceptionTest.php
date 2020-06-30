@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Remorhaz\Lexer\Runtime\Test\Exception;
+namespace Remorhaz\Lexer\Runtime\Test\Token\Exception;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Remorhaz\Lexer\Runtime\Exception\MatchersNotFoundException;
+use Remorhaz\Lexer\Runtime\Token\Exception\MatchersNotFoundException;
 
 /**
- * @covers \Remorhaz\Lexer\Runtime\Exception\MatchersNotFoundException
+ * @covers \Remorhaz\Lexer\Runtime\Token\Exception\MatchersNotFoundException
  */
 class MatchersNotFoundExceptionTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Remorhaz\Lexer\Runtime\Test\Exception;
+namespace Remorhaz\Lexer\Runtime\Test\Token\Exception;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Remorhaz\Lexer\Runtime\Exception\InvalidMatcherKeyException;
+use Remorhaz\Lexer\Runtime\Token\Exception\InvalidMatcherKeyException;
 
 /**
- * @covers \Remorhaz\Lexer\Runtime\Exception\InvalidMatcherKeyException
+ * @covers \Remorhaz\Lexer\Runtime\Token\Exception\InvalidMatcherKeyException
  */
 class InvalidMatcherKeyExceptionTest extends TestCase
 {

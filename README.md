@@ -12,6 +12,7 @@ This library provides minimalistic runtime environment to perform lexical analys
 
 ## Requirements
 * PHP 7.3+
+* Internationalization functions ([intl](https://www.php.net/manual/en/book.intl.php))
 
 ## Installation
 To install this library using [composer](https://getcomposer.org/), run the following command:

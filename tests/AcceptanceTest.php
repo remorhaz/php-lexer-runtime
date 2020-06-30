@@ -9,6 +9,8 @@ use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\PreviewBufferInterface;
 use Remorhaz\Lexer\Runtime\IO\StringInput;
 use Remorhaz\Lexer\Runtime\Lexer;
+use Remorhaz\Lexer\Runtime\Token\MatcherInterface;
+use Remorhaz\Lexer\Runtime\Token\MatcherSelector;
 use Remorhaz\Lexer\Runtime\Token\MatcherSelectorInterface;
 use Remorhaz\Lexer\Runtime\Token\MatchFail;
 use Remorhaz\Lexer\Runtime\Token\MatchRepeat;
@@ -16,8 +18,6 @@ use Remorhaz\Lexer\Runtime\Token\MatchResultInterface;
 use Remorhaz\Lexer\Runtime\Token\MatchSuccess;
 use Remorhaz\Lexer\Runtime\Token\Token;
 use Remorhaz\Lexer\Runtime\Token\TokenInterface;
-use Remorhaz\Lexer\Runtime\Token\TokenMatcherInterface;
-use RuntimeException;
 
 use function array_map;
 use function chr;
@@ -30,9 +30,9 @@ use function ord;
 class AcceptanceTest extends TestCase
 {
 
+    public const TOKEN_EOI = 0x00;
     public const TOKEN_A = 0x01;
     public const TOKEN_B = 0x02;
-    public const TOKEN_EOI = 0xFF;
 
     /**
      * @param string $inputText
@@ -41,7 +41,8 @@ class AcceptanceTest extends TestCase
      */
     public function testLexerMatchesTokensCorrectly(string $inputText, array $expectedValue): void
     {
-        $lexer = new Lexer(['a' => $this->createMatcherA(), 'b' => $this->createMatcherB()]);
+        $matcherSelector = new MatcherSelector(['a' => $this->createMatcherA(), 'b' => $this->createMatcherB()]);
+        $lexer = new Lexer($matcherSelector);
         $input = new StringInput($inputText);
         $tokenReader = $lexer->createTokenReader($input);
 
@@ -124,10 +125,9 @@ class AcceptanceTest extends TestCase
         ];
     }
 
-    private function createMatcherA(): TokenMatcherInterface
+    private function createMatcherA(): MatcherInterface
     {
-        return new class implements TokenMatcherInterface {
-
+        return new class implements MatcherInterface {
             public function match(
                 int $offset,
                 PreviewBufferInterface $input,
@@ -173,18 +173,12 @@ class AcceptanceTest extends TestCase
 
                 return new MatchFail($offset, ...$input->getEmptyLexeme()->getStartOffsets());
             }
-
-            public function createFinishToken(int $offset, PreviewBufferInterface $input): TokenInterface
-            {
-                return new Token(AcceptanceTest::TOKEN_EOI, $offset, $input->getEmptyLexeme());
-            }
         };
     }
 
-    private function createMatcherB(): TokenMatcherInterface
+    private function createMatcherB(): MatcherInterface
     {
-        return new class implements TokenMatcherInterface {
-
+        return new class implements MatcherInterface {
             public function match(
                 int $offset,
                 PreviewBufferInterface $input,
@@ -220,16 +214,12 @@ class AcceptanceTest extends TestCase
                     new Token(AcceptanceTest::TOKEN_B, $offset, $input->acceptLexeme())
                 );
             }
-
-            public function createFinishToken(int $offset, PreviewBufferInterface $input): TokenInterface
-            {
-                throw new RuntimeException("This matcher cannot create finish tokens");
-            }
         };
     }
 
-    private function exportToken(TokenInterface $token): array
-    {
+    private function exportToken(
+        TokenInterface $token
+    ): array {
         return [
             'id' => $token->getId(),
             'offset' => $token->getOffset(),

@@ -6,7 +6,7 @@ namespace Remorhaz\Lexer\Runtime\Token;
 
 use Remorhaz\Lexer\Runtime\IO\PreviewBufferInterface;
 
-interface TokenMatcherInterface
+interface MatcherInterface
 {
 
     public function match(
@@ -14,12 +14,4 @@ interface TokenMatcherInterface
         PreviewBufferInterface $input,
         MatcherSelectorInterface $selector
     ): MatchResultInterface;
-
-    /**
-     * @param int $offset
-     * @param PreviewBufferInterface $input
-     * @return TokenInterface
-     * @psalm-pure
-     */
-    public function createFinishToken(int $offset, PreviewBufferInterface $input): TokenInterface;
 }

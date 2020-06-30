@@ -13,6 +13,11 @@ interface TokenInterface extends LexemeAwareInterface
 {
 
     /**
+     * For convenience, zero token ID is reserved for end-of-input token.
+     */
+    public const ID_EOI = 0;
+
+    /**
      * @return int
      * @psalm-pure
      */
@@ -25,11 +30,10 @@ interface TokenInterface extends LexemeAwareInterface
     public function getOffset(): int;
 
     /**
-     * @param string $name
-     * @return mixed
+     * @return AttributeCollectionInterface
      * @psalm-pure
      */
-    public function getAttribute(string $name);
+    public function getAttributes(): AttributeCollectionInterface;
 
     /**
      * @return bool

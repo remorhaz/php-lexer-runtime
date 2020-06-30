@@ -48,7 +48,7 @@ final class EmptyLexeme implements LexemeInterface
      * {@inheritDoc}
      *
      * @return SymbolInterface[]
-     * @psalm-return array<int,SymbolInterface>
+     * @psalm-return array<int, SymbolInterface>
      * @psalm-pure
      */
     public function getSymbols(): array
@@ -60,7 +60,7 @@ final class EmptyLexeme implements LexemeInterface
      * {@inheritDoc}
      *
      * @return int[]
-     * @psalm-return array<int,int>
+     * @psalm-return array<int, int>
      */
     public function getStartOffsets(): array
     {
@@ -71,7 +71,7 @@ final class EmptyLexeme implements LexemeInterface
      * {@inheritDoc}
      *
      * @return int[]
-     * @psalm-return array<int,int>
+     * @psalm-return array<int, int>
      */
     public function getFinishOffsets(): array
     {

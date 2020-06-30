@@ -10,6 +10,9 @@ use Remorhaz\Lexer\Runtime\IO\Exception\InvalidSymbolCodeException;
 use Remorhaz\Lexer\Runtime\IO\LexemeInterface;
 use Remorhaz\Lexer\Runtime\IO\NullLexeme;
 use Remorhaz\Lexer\Runtime\IO\SymbolInterface;
+use Remorhaz\Lexer\Runtime\Token\AttributeCollection;
+use Remorhaz\Lexer\Runtime\Token\BooleanAttribute;
+use Remorhaz\Lexer\Runtime\Token\IntegerAttribute;
 use Remorhaz\Lexer\Runtime\Token\TokenInput;
 use Remorhaz\Lexer\Runtime\Token\TokenReaderInterface;
 use Remorhaz\Lexer\Runtime\Token\Token;
@@ -22,7 +25,12 @@ class TokenInputTest extends TestCase
 
     public function testRead_NonIntegerCodeInTokenAttribute_ThrowsException(): void
     {
-        $token = new Token(1, 2, new NullLexeme(), ['symbol.code' => 'a']);
+        $token = new Token(
+            1,
+            2,
+            new NullLexeme(),
+            new AttributeCollection(['symbol.code' => new BooleanAttribute(true)])
+        );
         $reader = $this->createMock(TokenReaderInterface::class);
         $reader
             ->method('read')
@@ -34,7 +42,12 @@ class TokenInputTest extends TestCase
 
     public function testRead_IntegerCodeInTokenAttribute_ReturnsSymbolWithSameCode(): void
     {
-        $token = new Token(1, 2, new NullLexeme(), ['symbol.code' => 3]);
+        $token = new Token(
+            1,
+            2,
+            new NullLexeme(),
+            new AttributeCollection(['symbol.code' => new IntegerAttribute(3)])
+        );
         $reader = $this->createMock(TokenReaderInterface::class);
         $reader
             ->method('read')
@@ -46,7 +59,12 @@ class TokenInputTest extends TestCase
     public function testRead_TokenWithLexeme_ReturnsSymbolWithSameConstituentLexeme(): void
     {
         $lexeme = $this->createMock(LexemeInterface::class);
-        $token = new Token(1, 2, $lexeme, ['symbol.code' => 3]);
+        $token = new Token(
+            1,
+            2,
+            $lexeme,
+            new AttributeCollection(['symbol.code' => new IntegerAttribute(3)])
+        );
         $reader = $this->createMock(TokenReaderInterface::class);
         $reader
             ->method('read')
@@ -188,7 +206,12 @@ class TokenInputTest extends TestCase
     {
         foreach ($tokens as $tokenArgs) {
             [$id, $offset, $code] = $tokenArgs;
-            yield new Token($id, $offset, new NullLexeme(), ['symbol.code' => $code]);
+            yield new Token(
+                $id,
+                $offset,
+                new NullLexeme(),
+                new AttributeCollection(['symbol.code' => new IntegerAttribute($code)])
+            );
         }
     }
 

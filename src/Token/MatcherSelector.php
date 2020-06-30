@@ -7,15 +7,16 @@ namespace Remorhaz\Lexer\Runtime\Token;
 use function array_shift;
 use function array_unshift;
 use function count;
+use function is_string;
 
 final class MatcherSelector implements MatcherSelectorInterface
 {
 
     /**
-     * @var TokenMatcherInterface[]
-     * @psalm-var array<string,TokenMatcherInterface>
+     * @var MatcherInterface[]
+     * @psalm-var array<string,MatcherInterface>
      */
-    private $matchers;
+    private $matchers = [];
 
     /**
      * @var string[]
@@ -24,22 +25,34 @@ final class MatcherSelector implements MatcherSelectorInterface
     private $matcherKeys = [];
 
     /**
-     * @param TokenMatcherInterface[] $matchers
-     * @psalm-param array<string,TokenMatcherInterface> $matchers
-     * @param string                  $startMatcherKey
+     * @param MatcherInterface[] $matchers
+     * @psalm-param array<array-key, MatcherInterface> $matchers
+     * @param string|null        $startMatcherKey
      */
-    public function __construct(array $matchers, string $startMatcherKey)
+    public function __construct(array $matchers, ?string $startMatcherKey = null)
     {
-        $this->matchers = $matchers;
+        if (empty($matchers)) {
+            throw new Exception\MatchersNotFoundException();
+        }
+        foreach ($matchers as $matcherKey => $matcher) {
+            if (!is_string($matcherKey)) {
+                throw new Exception\InvalidMatcherKeyException($startMatcherKey);
+            }
+            $this->matchers[$matcherKey] = $matcher;
+            if (!isset($startMatcherKey)) {
+                $startMatcherKey = $matcherKey;
+            }
+        }
+
         $this->setMatcher($startMatcherKey);
     }
 
     /**
      * @param string $matcherKey
-     * @return TokenMatcherInterface
+     * @return MatcherInterface
      * @psalm-pure
      */
-    private function getMatcherByKey(string $matcherKey): TokenMatcherInterface
+    private function getMatcherByKey(string $matcherKey): MatcherInterface
     {
         if (isset($this->matchers[$matcherKey])) {
             return $this->matchers[$matcherKey];
@@ -52,10 +65,10 @@ final class MatcherSelector implements MatcherSelectorInterface
     /**
      * {@inheritDoc}
      *
-     * @return TokenMatcherInterface
+     * @return MatcherInterface
      * @psalm-pure
      */
-    public function getMatcher(): TokenMatcherInterface
+    public function getMatcher(): MatcherInterface
     {
         if (isset($this->matcherKeys[0])) {
             return $this->getMatcherByKey($this->matcherKeys[0]);

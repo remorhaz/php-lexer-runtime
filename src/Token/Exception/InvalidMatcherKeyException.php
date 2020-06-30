@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Remorhaz\Lexer\Runtime\Exception;
+namespace Remorhaz\Lexer\Runtime\Token\Exception;
 
 use DomainException;
 use Throwable;
